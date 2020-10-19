@@ -1,25 +1,24 @@
 package main
 
 import "fmt"
-import "time" 
 
-func main() {
+func main(){
 
-	done := make (chan bool , 1) 
-
-	go worker(done ) 
-println(	<-done )
-
+	c := make(chan int , 10 ) 
+	go fibonacci(cap(c) , c ) 
+	for i:= range c {
+		fmt.Println(i) 
+	}
 
 }
 
-func worker (done chan bool ) { 
-	fmt.Print("working... ")
-	time.Sleep(time.Second) 
-	fmt.Println("done"  )
-	done <- true 
+func fibonacci(n int , c chan int ) { 
+	x , y := 0 , 1 
+	for i:= 0 ; i< n ; i++ {
+		c <- x 
+		x , y = y , x+y 
 
-	
-
+	}
+	close(c)
 }
 
